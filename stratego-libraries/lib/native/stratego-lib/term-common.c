@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 ATerm SSL_mkterm(ATerm c, ATerm ts0)
-{ 
+{
   char *f;
   ATermList ts;
   ATerm t;
@@ -25,7 +25,7 @@ ATerm SSL_mkterm(ATerm c, ATerm ts0)
     break;
   case AT_APPL:
     if(ATisString(c))
-      { 
+      {
 	f = ATgetName(ATgetAFun(c));
 	if(f[0] == '\0')
 	  quoted = ATfalse;
@@ -35,12 +35,12 @@ ATerm SSL_mkterm(ATerm c, ATerm ts0)
 	    f = ATgetName(fun);
 	    quoted = ATisQuoted(fun);
 	  }
-	
+
 	if(ATgetType(ts0) != AT_LIST)
 	  _fail(ts0);
-	
+
 	ts = (ATermList) ts0;
-	
+
 	t = ((ATerm) ATmakeApplList(ATmakeSymbol(f, ATgetLength(ts), quoted), ts));
       }
     else
@@ -65,7 +65,7 @@ ATerm SSL_explode_term(ATerm t)
         t1 = ATmakeStringQ(ATgetName(sym));
       else
         t1 = ATmakeString(ATgetName(sym));
-  
+
       t = App2("", t1, (ATerm) ATgetArguments((ATermAppl)t)
 	       /* list_to_consnil_shallow((ATerm)ATgetArguments((ATermAppl)t)) */
 	       );
@@ -81,10 +81,10 @@ ATerm SSL_explode_term(ATerm t)
     {
       t = App2("", (ATerm)ATempty, t);
 	/*
-      if(t == (ATerm)ATempty) 
+      if(t == (ATerm)ATempty)
 	t = App2("", ATmakeString("Nil"), (ATerm)ATempty);
       else
-	t = App2("", ATmakeString("Cons"), 
+	t = App2("", ATmakeString("Cons"),
 		 (ATerm) ATmakeList2(ATgetFirst((ATermList)t), (ATerm)ATgetNext((ATermList)t)));
 	*/
       break;
@@ -206,13 +206,14 @@ ATerm SSL_address(ATerm t)
 ATerm SSL_checksum(ATerm t) {
   unsigned char *digest = ATchecksum(t);
 
-  char buf[32] ;
+  // sprintf writes \0 so we need one character more than the length of the digest.
+  char buf[33];
   int i, offset = 0;
 
   for (i=0; i<16 ; i++) {
     offset += sprintf(&(buf[offset]), "%02x", digest[i]);
   }
-  
+
   return((ATerm) ATmakeAppl0(ATmakeSymbol(buf, 0, ATtrue))) ;
 }
 

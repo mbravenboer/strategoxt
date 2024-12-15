@@ -29,31 +29,32 @@ USA
 #include <string.h>
 #include <assert.h>
 #include <aterm2.h>
-#include "aterm-extension.h"  
+#include "aterm-extension.h"
 
 typedef struct str_frame *StrSL;
 typedef struct str_closure *StrCL;
 
-struct str_closure 
+struct str_closure
 {
   ATerm (*fun)();
   StrSL sl;
 };
 
-struct str_frame 
+struct str_frame
 {
   StrSL parent;
-  ATerm **vars;  
+  ATerm **vars;
   StrCL *funs;
 };
 
 #define sl_decl(par) \
   struct str_frame frame; \
-  frame.parent = (par); 
+  frame.parent = (par); \
+  (void) frame;
 
 #define sl_vars(n) \
   ATerm *sl_vars[n]; \
-  frame.vars = sl_vars; 
+  frame.vars = sl_vars;
 
 #define sl_funs(n) \
   StrCL sl_funs[n]; \
